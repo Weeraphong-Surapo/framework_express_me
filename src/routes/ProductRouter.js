@@ -5,7 +5,7 @@ const { index, store, update, show, destroy } = require("../controller/ProductCo
 const router = require("express").Router()
     
 // example use router
-router.get("/", nameFunction)
+// router.get("/", nameFunction)
 
 // use router
 router.get("/", index)

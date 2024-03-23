@@ -69,7 +69,7 @@ const { index, store, update, show, destroy } = require("../controller/${routerN
 const router = require("express").Router()
     
 // example use router
-router.get("/", nameFunction)
+// router.get("/", nameFunction)
 
 // use router
 router.get("/", index)
@@ -93,8 +93,9 @@ module.exports = router`;
 
 function createModel(fileName) {
     const modelName = fileName.replace(/Model$/, ''); // Remove "Router" suffix
-    const modelTemplate = `module.exports = (sequelize) => {
-    const ${modelName} = sequelize.define('${modelName}', {
+    const modelTemplate = `const { Sequelize, DataTypes } = require("sequelize");
+    module.exports = (sequelize) => {
+    const ${modelName} = sequelize.define('${modelName.toLowerCase()}', {
         example: {
             type: DataTypes.STRING,
             allowNull: false
