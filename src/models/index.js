@@ -35,8 +35,8 @@ db.sequelize = sequelize
 // refresh Database
 sequelize.drop();
 
-
-db.products = require("./ProductModel.js")(sequelize, DataTypes)
+// use table
+// db.products = require("./ProductModel.js")(sequelize, DataTypes)
 
 
 db.sequelize.sync({ force: false }).then(() => {
