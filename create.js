@@ -14,42 +14,83 @@ switch (command) {
         createController(fileName);
         break;
     case 'router':
-        createRouter(fileName); // แก้ที่นี่เพื่อส่งพารามิเตอร์ fileName
-        break; // เพิ่ม break เพื่อหยุดการทำงานของ switch statement 
+        createRouter(fileName);
+        break;
     case 'model':
-        createModel(fileName); // แก้ที่นี่เพื่อส่งพารามิเตอร์ fileName
-        break; // เพิ่ม break เพื่อหยุดการทำงานของ switch statement 
+        createModel(fileName);
+        break;
     default:
         console.log('Invalid command');
         process.exit(1);
 }
 
 function createController(fileName) {
+    const filePath = path.join(__dirname, `src/controller/${fileName}.js`);
+
+    if (fs.existsSync(filePath)) {
+        console.error('File already exists:', filePath);
+        process.exit(1);
+    }
+
     const controllerTemplate = `const db = require("../models")
 // example import db
 // const Product = db.products
     
 module.exports = {
     index: async (req, res) => {
+        try {
 
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                message: "Internal server error "
+            })
+        }
     },
 
     store: async (req, res) => {
+        try {
 
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                message: "Internal server error "
+            })
+        }
     },
         
     show: async (req, res) => {
-    
+        try {
+
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                message: "Internal server error "
+            })
+        }
     },
 
     update: async (req, res) => {
-    
+        try {
+
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                message: "Internal server error "
+            })
+        }
     },
     destroy: async (req, res) => {
-    
+        try {
+
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                message: "Internal server error "
+            })
+        }
     }
 }`;
-    const filePath = path.join(__dirname, `src/controller/${fileName}.js`);
 
     fs.writeFile(filePath, controllerTemplate, (err) => {
         if (err) {
@@ -60,16 +101,31 @@ module.exports = {
     });
 }
 
-function createRouter(fileName) { // แก้ที่นี่เพื่อรับพารามิเตอร์ fileName
+function createRouter(fileName) {
+    const filePath = path.join(__dirname, `src/routes/${fileName}.js`);
+
+    if (fs.existsSync(filePath)) {
+        console.error('File already exists:', filePath);
+        process.exit(1);
+    }
+
     const routerName = fileName.replace(/Router$/, ''); // Remove "Router" suffix
     const routerTemplate = `// import controllers 
 const { index, store, update, show, destroy } = require("../controller/${routerName}Controller") // แก้ที่นี่เพื่อใช้ fileName
-    
+const { body, validationResult } = require('express-validator');
+
 // router
 const router = require("express").Router()
-    
-// example use router
-// router.get("/", nameFunction)
+
+
+// example validation
+// const validation = [
+//     body('name')
+//         .notEmpty().withMessage('กรุณากรอกชื่อ')
+//         .isLength({ min: 5 }).withMessage('ชื่อต้องมีความยาวอย่างน้อย 5 ตัวอักษร'),
+//     body('price')
+//         .notEmpty().withMessage("กรุณากรอกราคา")
+// ]
 
 // use router
 router.get("/", index)
@@ -79,22 +135,27 @@ router.delete("/:id", destroy)
 router.patch("/:id", update)
     
 module.exports = router`;
-    const filePath = path.join(__dirname, `src/routes/${fileName}.js`);
 
     fs.writeFile(filePath, routerTemplate, (err) => {
         if (err) {
             console.error('Error creating file:', err);
             process.exit(1);
         }
-        console.log(`${fileName}.js created successfully! in src/controller/${fileName}.js`);
+        console.log(`${fileName}.js created successfully! in src/routes/${fileName}.js`);
     });
 }
 
-
 function createModel(fileName) {
-    const modelName = fileName.replace(/Model$/, ''); // Remove "Router" suffix
+    const filePath = path.join(__dirname, `src/models/${fileName}.js`);
+
+    if (fs.existsSync(filePath)) {
+        console.error('File already exists:', filePath);
+        process.exit(1);
+    }
+
+    const modelName = fileName.replace(/Model$/, ''); // Remove "Model" suffix
     const modelTemplate = `const { Sequelize, DataTypes } = require("sequelize");
-    module.exports = (sequelize) => {
+module.exports = (sequelize) => {
     const ${modelName} = sequelize.define('${modelName.toLowerCase()}', {
         example: {
             type: DataTypes.STRING,
@@ -104,7 +165,6 @@ function createModel(fileName) {
     
     return ${modelName};
 };`;
-    const filePath = path.join(__dirname, `src/models/${fileName}.js`);
 
     fs.writeFile(filePath, modelTemplate, (err) => {
         if (err) {
@@ -114,4 +174,3 @@ function createModel(fileName) {
         console.log(`${fileName}.js created successfully! in src/models/${fileName}.js`);
     });
 }
-

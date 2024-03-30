@@ -32,11 +32,17 @@ const db = {}
 db.Sequelize = Sequelize
 db.sequelize = sequelize
 
-// refresh Database
-sequelize.drop();
 
 // use table
-// db.products = require("./ProductModel.js")(sequelize, DataTypes)
+db.categorys = require("./CategoryModel.js")(sequelize, DataTypes)
+db.products = require("./ProductModel.js")(sequelize, DataTypes)
+db.users = require("./UserModel.js")(sequelize, DataTypes)
+db.departments = require("./DepartmentModel.js")(sequelize, DataTypes)
+db.listsals = require("./ListSaleModel.js")(sequelize, DataTypes)
+db.orders = require("./OrderModel.js")(sequelize, DataTypes)
+
+// refresh Database
+// sequelize.drop();
 
 
 db.sequelize.sync({ force: false }).then(() => {
